@@ -29,11 +29,15 @@ const renderSpinner = function (parentEl) {
 };
 
 const showRecipe = async function () {
-  renderSpinner(recipeContainer);
+  const id = window.location.hash.slice(1);
+
+  if (!id) return;
   // 1) loading recipe
+  renderSpinner(recipeContainer);
+
   try {
     const res = await fetch(
-      'https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886?key=5d383cab-1a41-48fc-839a-55c49a2b76dc '
+      `https://forkify-api.herokuapp.com/api/v2/recipes/${id}?key=5d383cab-1a41-48fc-839a-55c49a2b76dc`
     );
 
     const data = await res.json();
@@ -50,7 +54,7 @@ const showRecipe = async function () {
       cookingTime: recipe.cooking_time,
       ingredients: recipe.ingredients,
     };
-
+    console.log(recipe);
     // 2) rendering recipe
     const markup = `
           <figure class="recipe__fig">
@@ -114,7 +118,9 @@ const showRecipe = async function () {
                       <svg class="recipe__icon">
                         <use href="${icons}#icon-check"></use>
                       </svg>
-                      <div class="recipe__quantity">${ing.quantity}</div>
+                      <div class="recipe__quantity">${
+                        ing.quantity === null ? '0' : ing.quantity
+                      }</div>
                       <div class="recipe__description">
                         <span class="recipe__unit">${ing.unit}</span>
                         ${ing.description}
@@ -153,4 +159,9 @@ const showRecipe = async function () {
   }
 };
 
-showRecipe();
+['hashchange', 'load'].forEach(event =>
+  window.addEventListener(event, showRecipe)
+);
+
+// window.addEventListener('hashchange', showRecipe);
+// window.addEventListener('load', showRecipe);
