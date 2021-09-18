@@ -12,7 +12,7 @@ export const state = {
 
 export const loadRecipe = async function (id) {
   try {
-    const data = await getJSON(`${API_URL}/${id}`);
+    const data = await getJSON(`${API_URL}${id}`);
 
     const { recipe } = data.data;
     state.recipe = {
@@ -34,6 +34,7 @@ export const loadRecipe = async function (id) {
 export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
+
     const data = await getJSON(`${API_URL}?search=${query}`);
 
     state.search.results = data.data.recipes.map(rec => {
@@ -45,7 +46,8 @@ export const loadSearchResults = async function (query) {
       };
     });
   } catch (err) {
-    console.error(`${err}❤️‍🩹`);
+    console.log(`${err}❤️‍🩹`);
     throw err;
   }
 };
+loadSearchResults('pizza');

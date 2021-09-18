@@ -1,11 +1,11 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
+import searchView from './views/searchView.js';
 
 import 'regenerator-runtime/runtime';
 import 'core-js/stable';
-import searchView from './views/searchView';
-
-const recipeContainer = document.querySelector('.recipe');
+import { Fraction } from 'fractional';
+import { state } from './model.js';
 
 // https://forkify-api.herokuapp.com/v2
 
