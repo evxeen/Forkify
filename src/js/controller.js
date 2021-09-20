@@ -8,6 +8,7 @@ import 'core-js/stable';
 import { Fraction } from 'fractional';
 import { state } from './model.js';
 import paginationView from './views/paginationView';
+import bookmarksView from './views/bookmarksView';
 
 // https://forkify-api.herokuapp.com/v2
 
@@ -22,6 +23,7 @@ const controlRecipes = async function () {
 
     // 0) Update results view to mark selected search result
     resultsView.update(model.getSearchResultsPage());
+    bookmarksView.update(model.state.bookmarks);
 
     // 1) loading recipe
     await model.loadRecipe(id);
@@ -71,11 +73,15 @@ const controlServings = function (newServings) {
 };
 
 const controlAddBookmark = function () {
+  // 1) Add/remove bookmarks
   if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
   else model.deleteBookmark(model.state.recipe.id);
 
-  console.log(model.state.recipe);
+  // 2) Update recipe view
   recipeView.update(model.state.recipe);
+
+  // 3) Render bookmarks
+  bookmarksView.render(model.state.bookmarks);
 };
 
 const init = function () {
